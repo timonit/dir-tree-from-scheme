@@ -1,20 +1,17 @@
 import { Tree } from './app';
-import { DirFile, Folder } from './domain';
+import schemeData from './test.json';
 
-const schemeData = {
-  timon: {
-    "index.ts": true,
-    "f": undefined,
-    "a": null,
-    src: {
-      'index.js': null,
-      dist: {
-        'index.html': null,
-      }
-    }
-  },
-  demo: {},
-}
+// const schemeData = {
+//   timon: {
+//     "index.ts": true,
+//     "a": null,
+//     src: {
+//       'index.js': null,
+//     }
+//   },
+//   demo: {},
+// }
+
 
 console.log('==== scheme ====\n');
 console.log(schemeData);

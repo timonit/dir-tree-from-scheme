@@ -22,7 +22,7 @@ export class Folder extends DirEnt {
     
     entries.forEach(([key, value]) => {
       if (value && typeof value === 'object') this.contains[key] = new Folder(key, this, value);
-      else this.contains[key] = new DirFile(key, this);
+      else this.contains[key] = new DirFile(key, this, value);
     });
   }
 

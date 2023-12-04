@@ -41,7 +41,7 @@
     // "resolvePackageJsonExports": true,
     // "resolvePackageJsonImports": true,
     // "customConditions": [],
-    // "resolveJsonModule": true,
+    "resolveJsonModule": true,
     // "allowArbitraryExtensions": true,
     // "noResolve": true,
 

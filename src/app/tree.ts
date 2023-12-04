@@ -1,5 +1,6 @@
 import { Folder, DirFile } from '@/domain';
 import { mkdirSync, existsSync } from 'fs';
+import { Scheme } from './scheme';
 
 type ParseReturn = {[p: string]: Folder | DirFile};
 
@@ -18,13 +19,13 @@ export class Tree {
     return tree;
   }
 
-  fill(scheme: any): ParseReturn {
+  fill(scheme: Scheme): ParseReturn {
     const result: ParseReturn = {};
     const entries = Object.entries(scheme);
   
     entries.forEach(([key, value]) => {
       if (value && typeof value === 'object') result[key] = new Folder(key, null, value);
-      else result[key] = new DirFile(key);
+      else result[key] = new DirFile(key, null, value);
     });
   
     this.contains = result;
