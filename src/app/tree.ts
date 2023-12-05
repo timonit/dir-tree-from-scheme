@@ -1,9 +1,8 @@
-import { Folder, DirFile } from '@/domain';
+import { VirtualFolder, VirtualFile, FolderContains, Scheme } from '@/domain';
 import { mkdirSync, existsSync, rmSync } from 'fs';
-import { Scheme } from '../core';
 import { TreeConfig } from './types';
 
-type ParseReturn = {[p: string]: Folder | DirFile};
+type ParseReturn = {[p: string]: VirtualFolder | VirtualFile};
 
 export const defaultConfig: TreeConfig = {
   clearable: false,
@@ -27,7 +26,7 @@ export class Tree {
   /**
    * Виртуальное содержимое дерева
    */
-  contains: ParseReturn = {};
+  contains: FolderContains = {};
 
   private constructor() {}
 
@@ -47,12 +46,15 @@ export class Tree {
    */
   fill(scheme: Scheme): ParseReturn {
     const result: ParseReturn = {};
-    const entries = Object.entries(scheme);
-  
-    entries.forEach(([key, value]) => {
-      if (value && typeof value === 'object') result[key] = new Folder(key, null, value);
-      else result[key] = new DirFile(key, null, value);
-    });
+    
+    if (Array.isArray(scheme)) scheme.forEach(val => result[val] = new VirtualFile(val, null));
+    else {
+      const entries = Object.entries(scheme);  
+      entries.forEach(([key, value]) => {
+        if (value && typeof value === 'object') result[key] = new VirtualFolder(key, null, value);
+        else result[key] = new VirtualFile(key, null, value);
+      });
+    }
   
     this.contains = result;
 
