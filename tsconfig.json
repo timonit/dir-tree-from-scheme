@@ -21,7 +21,7 @@
     // "moduleDetection": "auto",
 
     "module": "commonjs",
-    "rootDir": "./src",
+    // "rootDir": "./src",
     // "moduleResolution": "node10",
     // "baseUrl": "./src",
     "paths": {
@@ -98,6 +98,7 @@
     // "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
+  "include": ["src"],
   "exclude": ["jest.config.ts"],
   "ts-node": {
     // Do not forget to `npm i -D tsconfig-paths`
