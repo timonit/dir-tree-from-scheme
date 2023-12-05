@@ -1,4 +1,4 @@
-import { DirFile } from './file';
+import { VirtualFile } from './file';
 import { appendFileSync } from 'fs';
 jest.mock('fs');
 
@@ -9,19 +9,19 @@ describe('file', () => {
   const folder = { path: './timon', contains: {}, fill(){}, generate(){}, name: '' };
 
   test('file name, data and path', () => {
-    const file = new DirFile(filename, folder, data);
+    const file = new VirtualFile(filename, folder, data);
     expect(file.name).toEqual(filename);
     expect(file.path).toEqual(path);
     expect(file.data).toEqual(data);
   })
 
   test('Set root path, without folder', () => {
-    const file = new DirFile(filename, folder, data);
+    const file = new VirtualFile(filename, folder, data);
     expect(file.path).toEqual(path);
   })
 
   test('Generate file with appendFileSync method', () => {
-    const file = new DirFile(filename, null, data);
+    const file = new VirtualFile(filename, null, data);
     const target = './target';
 
     file.generate(target);

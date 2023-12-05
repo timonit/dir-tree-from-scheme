@@ -3,7 +3,7 @@ export type Generator = (path: string) => void;
 /**
  * Базовая сущность
  */
-export abstract class DirEnt {
+export abstract class VirtualEntity {
   /**
    * Название объекта
    */

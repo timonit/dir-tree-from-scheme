@@ -1,6 +1,6 @@
-import { Scheme } from '@/core';
-import { Folder } from './folder';
-import { DirFile } from '../file';
+import { Scheme } from './types';
+import { VirtualFolder } from './folder';
+import { VirtualFile } from '../file';
 import { mkdirSync } from 'fs';
 jest.mock('fs');
 
@@ -9,15 +9,15 @@ describe('Folder', () => {
   const path = "test";
 
   test('folder has name and path', () => {
-    const folder = new Folder(foldername, null);
+    const folder = new VirtualFolder(foldername, null);
 
     expect(folder.name).toEqual(foldername);
     expect(folder.path).toEqual(path);
   })
 
   test('set parent and assemble path', () => {
-    const parent = new Folder('parent', null);
-    const folder = new Folder(foldername, parent);
+    const parent = new VirtualFolder('parent', null);
+    const folder = new VirtualFolder(foldername, parent);
 
     expect(folder.parent === parent).toBeTruthy();
     expect(folder.path).toEqual(`${parent.path}/${folder.name}`);
@@ -26,16 +26,18 @@ describe('Folder', () => {
   test('folder fill content file and folder by scheme', () => {
     const scheme: Scheme = {
       'test.file': true,
-      testdir: {},
+      dir: {},
+      arrdir: [],
     };
-    const folder = new Folder(foldername, null, scheme);
+    const folder = new VirtualFolder(foldername, null, scheme);
 
-    expect(folder.contains['test.file']).toBeInstanceOf(DirFile);
-    expect(folder.contains['testdir']).toBeInstanceOf(Folder);
+    expect(folder.contains['test.file']).toBeInstanceOf(VirtualFile);
+    expect(folder.contains['dir']).toBeInstanceOf(VirtualFolder);
+    expect(folder.contains['arrdir']).toBeInstanceOf(VirtualFolder);
   });
 
   test('Generate folder with mkdirSync method', () => {
-    const folder = new Folder(foldername);
+    const folder = new VirtualFolder(foldername);
     const target = './target';
 
     folder.generate(target);

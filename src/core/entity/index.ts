@@ -1,1 +1,1 @@
-export * from './dirent';
+export * from './virtual-entity';
