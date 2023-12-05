@@ -2,8 +2,18 @@ import { DirEnt } from '@/core';
 import { Folder } from '../folder/folder';
 import { appendFileSync } from 'fs';
 
+/**
+ * Виртуальный объект файл
+ */
 export class DirFile extends DirEnt {
+  /**
+   * Папка
+   */
   folder?: Folder | null;
+
+  /**
+   * Данные файла
+   */
   data?: string | number | boolean | null;
 
   constructor(name: string, folder?: Folder | null, data?: string | number | boolean | null) {
@@ -16,7 +26,6 @@ export class DirFile extends DirEnt {
   }
 
   generate(target: string): void {
-    console.log(`File generating ${target}/${this.path}`);
     let data: string;
 
     switch(typeof this.data) {

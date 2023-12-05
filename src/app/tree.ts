@@ -1,17 +1,40 @@
 import { Folder, DirFile } from '@/domain';
-import { mkdirSync, existsSync } from 'fs';
-import { Scheme } from './scheme';
+import { mkdirSync, existsSync, rmSync } from 'fs';
+import { Scheme } from '../core';
+import { TreeConfig } from './types';
 
 type ParseReturn = {[p: string]: Folder | DirFile};
 
+export const defaultConfig: TreeConfig = {
+  clearable: false,
+};
+
+/**
+ * Дерево файлов и папок
+ */
 export class Tree {
+  /**
+   * Целевая локация
+   */
   target = '.';
 
+  config: TreeConfig = defaultConfig;
+
+  set clearable(value: boolean) {
+    this.config.clearable = value;
+  }
+
+  /**
+   * Виртуальное содержимое дерева
+   */
   contains: ParseReturn = {};
 
   private constructor() {}
 
-  static create(target: string, scheme: {[p: string]: any}): Tree {
+  /**
+   * Создать дерево в целевой локации по схеме
+   */
+  static create(target: string, scheme: Scheme): Tree {
     const tree = new Tree();
     tree.target = target;
     tree.fill(scheme);
@@ -19,6 +42,9 @@ export class Tree {
     return tree;
   }
 
+  /**
+   * Залить дерево виртуальными файлами и папками
+   */
   fill(scheme: Scheme): ParseReturn {
     const result: ParseReturn = {};
     const entries = Object.entries(scheme);
@@ -33,12 +59,21 @@ export class Tree {
     return result;
   }
 
+  /**
+   * Сгенерировать файлы и папки в целевой локации
+   */
   generateFiles() {
+    const isTargetExist = existsSync(`${this.target}/`);
+    
+    if (!isTargetExist) mkdirSync(this.target);
+
+    if (isTargetExist && this.config.clearable) {
+      rmSync(this.target, {recursive: true});
+      mkdirSync(this.target);
+    }
+  
     const entries = Object.entries(this.contains);
 
-    const isTargetExist = existsSync(`${this.target}/`);
-    if (!isTargetExist) mkdirSync(this.target);
-  
     entries.forEach(([key, ent]) => ent.generate(this.target));
   }
 }

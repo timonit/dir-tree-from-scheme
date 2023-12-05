@@ -1,13 +1,23 @@
 import { DirEnt } from '@/core';
 import { DirFile } from '../file';
 import { mkdirSync } from 'fs';
+import { Scheme } from '@/core';
 
+/**
+ * Виртуальная папка
+ */
 export class Folder extends DirEnt {
+  /**
+   * Родительская папка
+   */
   parent?: Folder | null;
 
+  /**
+   * Содержимое папки
+   */
   contains: {[p: string]: Folder | DirFile} = {};
 
-  constructor(name: string, parent?: Folder | null, content?: {[p: string]: any}) {
+  constructor(name: string, parent?: Folder | null, content?: Scheme) {
     const path = parent ? `${parent?.path}/${name}` : name;
     super(name, path);
     this.parent = parent;
@@ -17,7 +27,10 @@ export class Folder extends DirEnt {
     if (content) this.fill(content);
   }
 
-  fill(content: {[p: string]: any}) {
+  /**
+   * Залить виртуальными файлами и папками
+   */
+  fill(content: Scheme) {
     const entries = Object.entries(content);
     
     entries.forEach(([key, value]) => {
