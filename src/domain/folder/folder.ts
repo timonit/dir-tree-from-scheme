@@ -2,6 +2,7 @@ import { VirtualEntity } from '@/core';
 import { VirtualFile } from '@/domain';
 import { mkdirSync } from 'fs';
 import { FolderContains, Scheme } from './types';
+import { FS_ERRS } from '../types';
 
 /**
  * Виртуальная папка
@@ -39,7 +40,11 @@ export class VirtualFolder extends VirtualEntity {
   }
 
   generate(target: string): void {
-    mkdirSync(`${target}/${this.path}`);
+    try {
+      mkdirSync(`${target}/${this.path}`);
+    } catch(err: any) {
+      if (err.code !== FS_ERRS.EEXIST) throw err;
+    }
 
     const entries = Object.entries(this.contains);
   
