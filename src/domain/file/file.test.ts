@@ -13,12 +13,12 @@ describe('file', () => {
     expect(file.name).toEqual(filename);
     expect(file.path).toEqual(path);
     expect(file.data).toEqual(data);
-  })
+  });
 
   test('Set root path, without folder', () => {
     const file = new VirtualFile(filename, folder, data);
     expect(file.path).toEqual(path);
-  })
+  });
 
   test('Generate file with appendFileSync method', () => {
     const file = new VirtualFile(filename, null, data);
@@ -27,5 +27,5 @@ describe('file', () => {
     file.generate(target);
 
     expect(appendFileSync).toHaveBeenCalledWith(`${target}/${filename}`, data);
-  })
-})
+  });
+});

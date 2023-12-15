@@ -1,5 +1,6 @@
 import { VirtualEntity } from '@/core';
 import { appendFileSync } from 'fs';
+import { FS_ERRS } from '../types';
 
 /**
  * Виртуальный объект файл
@@ -31,7 +32,7 @@ export class VirtualFile extends VirtualEntity {
         break;
       }
       case 'function': {
-        console.error('function handler not implemented');
+        console.error('"function" handler not implemented');
       }
       default: {
         if (this.data === null || this.data === undefined) data = '';
@@ -39,6 +40,16 @@ export class VirtualFile extends VirtualEntity {
       }
     }
 
-    appendFileSync(`${target}/${this.path}`, data);
+    try {
+      appendFileSync(
+        `${target}/${this.path}`,
+        data,
+        {
+          flag: 'ax',
+        },
+      );
+    } catch(err: any) {
+      if (err.code !== FS_ERRS.EEXIST) throw err;
+    }
   }
 }
